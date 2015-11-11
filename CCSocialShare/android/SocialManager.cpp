@@ -35,8 +35,8 @@ namespace CCSocialShare {
         auto env = cocos2d::JniHelper::getEnv();
         cocos2d::JniMethodInfo methodInfo;
         if (cocos2d::JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, "postToTwitter", "(Ljava/lang/String;)V") ) {
-            jstring strj = env->NewStringUTF(message);
-            methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID, message);
+            jstring jstr = env->NewStringUTF(message);
+            methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, jstr);
         }
     }
 };
