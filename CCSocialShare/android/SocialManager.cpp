@@ -1,3 +1,4 @@
+#include "SocialManager.h"
 #include "platform/android/jni/JniHelper.h"
 
 namespace CCSocialShare {
@@ -12,7 +13,7 @@ namespace CCSocialShare {
         return nullptr;
     }
     
-    bool SocialManager::init(CCSocialShare::Service service)
+    bool SocialManager::init(Service service)
     {
         _service = service;
         return true;
