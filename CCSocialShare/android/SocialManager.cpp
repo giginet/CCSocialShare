@@ -2,6 +2,7 @@
 #include "platform/android/jni/JniHelper.h"
 
 namespace CCSocialShare {
+    const char* SOCIAL_SHARE_CLASS_NAME = "org/kawaz/socialshare/SocialShare";
     SocialManager* SocialManager::createWithService(Service service)
     {
         SocialManager *manager = new SocialManager();
@@ -31,5 +32,11 @@ namespace CCSocialShare {
 
     void SocialManager::postMessage(const char *message, cocos2d::Image *image, SocialManagerCompletionCallback callback)
     {
+        auto env = cocos2d::JniHelper::getEnv();
+        cocos2d::JniMethodInfo methodInfo;
+        if (cocos2d::JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, "postToTwitter", "(Ljava/lang/String;)V") ) {
+            jstring strj = env->NewStringUTF(message);
+            methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID, message);
+        }
     }
 };
