@@ -93,16 +93,16 @@ $ git clone https://github.com/giginet/CCSocialShare.git Classes/external/CCSoci
 
 ### for Android
 
-1: Open `CCSocialShare/android/` with Android Studio
+1: Open `proj.android-studio` with Android Studio
 
-2: Edit `proj.android-studio/settings.gradle` following
+2: Edit `proj.android-studio/settings.gradle` like following
 
 ```gradle
 include ':libcocos2dx'
 project(':libcocos2dx').projectDir = new File(settingsDir, '../cocos2d/cocos/platform/android/libcocos2dx')
 include ':YourFantasticGame'
 project(':YourFantasticGame').projectDir = new File(settingsDir, 'app')
-# Add this setting
+// Add this setting
 include ':socialshare'
 project(':socialshare').projectDir = new File(settingsDir, '../Classes/external/CCSocialShare/CCSocialShare/android')
 ```
