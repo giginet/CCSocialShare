@@ -39,14 +39,12 @@ namespace CCSocialShare {
             NSString *text = [NSString stringWithCString:message encoding:NSUTF8StringEncoding];
             [composeController setInitialText:text];
             
-            
-            // Convert cocos2d::Image UIImage
             if (imagePath != nullptr) {
-                auto filepath = std::string(imagePath);
-                //auto fullpath = cocos2d::FileUtils::get 
-
-                
-                
+                NSString *path = [NSString stringWithCString:imagePath encoding:NSUTF8StringEncoding];
+                UIImage *image = [UIImage imageWithContentsOfFile:path];
+                if (image != nil) {
+                    [composeController addImage:image];
+                }
             }
             
             UIWindow* window = [[UIApplication sharedApplication] keyWindow];

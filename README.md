@@ -49,7 +49,7 @@ void onShareButtonTapped() {
         texture->end();
 
         texture->saveToFile("screenshot.png", Image::Format::PNG, true, [&](RenderTexture* rt, const std::string& path) {
-            socialManager->postMessage("I beat this game!", path, [](CCSocialShare::PostResult result) {
+            socialManager->postMessage("I beat this game!", path.c_str(), [](CCSocialShare::PostResult result) {
                 if (result == CCSocialShare::PostResult::SUCCEED) {
                     // When to post is succeed
                 } else if (result == CCSocialShare::PostResult::CANCELED) {
