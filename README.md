@@ -10,7 +10,10 @@
 - Easy to share
     - SocialKit (iOS)
     - Intent (Android)
+- Image attachment
 - Compatible with Android Studio
+
+![](https://raw.githubusercontent.com/giginet/CCSocialShare/master/images/demo_ios.gif)
 
 ## Usage
 
