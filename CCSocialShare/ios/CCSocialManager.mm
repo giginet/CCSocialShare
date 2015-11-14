@@ -1,4 +1,4 @@
-#include "SocialManager.h"
+#include "CCSocialManager.h"
 #import <Social//Social.h>
 
 USING_NS_CC;
@@ -28,10 +28,10 @@ namespace CCSocialShare {
     
     void SocialManager::postMessage(const char *message, SocialManagerCompletionCallback callback)
     {
-        this->postMessage(message, nullptr, callback);
+        this->postMessage(message, "", callback);
     }
     
-    void SocialManager::postMessage(const char *message, cocos2d::Image *image, SocialManagerCompletionCallback callback)
+    void SocialManager::postMessage(const char *message, const char *imagePath, SocialManagerCompletionCallback callback)
     {
         if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
             NSString *serviceType = SLServiceTypeTwitter;
@@ -39,13 +39,14 @@ namespace CCSocialShare {
             NSString *text = [NSString stringWithCString:message encoding:NSUTF8StringEncoding];
             [composeController setInitialText:text];
             
+            
             // Convert cocos2d::Image UIImage
-            if (image != nullptr) {
-                NSData *data = [NSData dataWithBytes:image->getData() length:image->getDataLen()];
-                UIImage *image = [[UIImage alloc] initWithData:data];
-                if (image != nil) {
-                    [composeController addImage:image];
-                }
+            if (imagePath != nullptr) {
+                auto filepath = std::string(imagePath);
+                //auto fullpath = cocos2d::FileUtils::get 
+
+                
+                
             }
             
             UIWindow* window = [[UIApplication sharedApplication] keyWindow];

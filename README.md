@@ -15,7 +15,7 @@
 ## Usage
 
 ```cpp
-#include "CCSocialShare.h"
+#include "CCSocialManager.h"
 
 void onShareButtonTapped() {
     auto socialManager = CCSocialShare::SocialManager::createWithService(CCSocialShare::Service::TWITTER);
@@ -34,7 +34,7 @@ void onShareButtonTapped() {
 ## Add ScreenShot
 
 ```cpp
-#include "CCSocialShare.h"
+#include "CCSocialManager.h"
 
 USING_NS_CC;
 
@@ -86,8 +86,8 @@ $ git clone https://github.com/giginet/CCSocialShare.git Classes/external/CCSoci
 
 ### for iOS
 
-1. Add `CCSocialShare/ios` directory into your Xcode project.
-2. Add `SocialKit.framework`
+1. Add `CCSocialManager.{h,mm}` into your Xcode project.
+2. Add `Social.framework`
     - Target 'YourFantasticGame iOS' > General > Linked Frameworks and Libraries
 3. Build and Run
 
