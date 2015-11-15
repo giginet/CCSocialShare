@@ -1,4 +1,4 @@
-#include "SocialManager.h"
+#include "CCSocialManager.h"
 #include "platform/android/jni/JniHelper.h"
 
 namespace CCSocialShare {
@@ -27,16 +27,17 @@ namespace CCSocialShare {
 
     void SocialManager::postMessage(const char *message, SocialManagerCompletionCallback callback)
     {
-        this->postMessage(message, nullptr, callback);
+        this->postMessage(message, "", callback);
     }
 
-    void SocialManager::postMessage(const char *message, cocos2d::Image *image, SocialManagerCompletionCallback callback)
+    void SocialManager::postMessage(const char *message, const char *imagePath, SocialManagerCompletionCallback callback)
     {
         auto env = cocos2d::JniHelper::getEnv();
         cocos2d::JniMethodInfo methodInfo;
-        if (cocos2d::JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, "postToTwitter", "(Ljava/lang/String;)V") ) {
-            jstring jstr = env->NewStringUTF(message);
-            methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, jstr);
+        if (cocos2d::JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, "postToTwitter", "(Ljava/lang/String;Ljava/lang/String;)V") ) {
+            jstring messageStr = env->NewStringUTF(message);
+            jstring imagePathStr = env->NewStringUTF(imagePath);
+            methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, messageStr, imagePathStr);
         }
     }
 };
