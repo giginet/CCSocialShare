@@ -12,6 +12,7 @@
     - Intent (Android)
 - Image attachment
 - Compatible with Android Studio
+- Callback function (Currently in iOS only)
 
 ![](https://raw.githubusercontent.com/giginet/CCSocialShare/master/images/demo_ios.gif)
 
