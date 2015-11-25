@@ -1,11 +1,11 @@
 # CCSocialShare
 
-`CCSocialShare` provides to the feature to share for your games on cocos2d-x.
+`CCSocialShare` provides the feature to share for your games on cocos2d-x.
 
 ## Feature
 
 - Multi platforms (iOS/Android)
-- Multi services (Currently Twitter only)
+- Multi services (Twitter/Facebook)
 - Easy to integrate
 - Easy to share
     - SocialKit (iOS)
@@ -22,9 +22,9 @@
 #include "CCSocialManager.h"
 
 void onShareButtonTapped() {
-    auto socialManager = CCSocialShare::SocialManager::createWithService(CCSocialShare::Service::TWITTER);
-    if (socialManager->isAvailable()) {
-        socialManager->postMessage("I beat this game!", [](CCSocialShare::PostResult result) {
+    _socialManager = CCSocialShare::SocialManager::createWithService(CCSocialShare::Service::TWITTER);
+    if (_socialManager->isAvailable()) {
+        _socialManager->postMessage("I beat this game!", [](CCSocialShare::PostResult result) {
             if (result == CCSocialShare::PostResult::SUCCEED) {
                 // When to post is succeed
             } else if (result == CCSocialShare::PostResult::CANCELED) {
@@ -43,8 +43,8 @@ void onShareButtonTapped() {
 USING_NS_CC;
 
 void onShareButtonTapped() {
-    auto socialManager = CCSocialShare::SocialManager::createWithService(CCSocialShare::Service::TWITTER);
-    if (socialManager->isAvailable()) {
+    _socialManager = CCSocialShare::SocialManager::createWithService(CCSocialShare::Service::TWITTER);
+    if (_socialManager->isAvailable()) {
         Size size = Director::getInstance()->getWinSize();
         RenderTexture* texture = RenderTexture::create((int)size.width, (int)size.height);
         texture->setPosition(Point(size.width / 2, size.height / 2));
@@ -53,7 +53,7 @@ void onShareButtonTapped() {
         texture->end();
 
         texture->saveToFile("screenshot.png", Image::Format::PNG, true, [&](RenderTexture* rt, const std::string& path) {
-            socialManager->postMessage("I beat this game!", path.c_str(), [](CCSocialShare::PostResult result) {
+            _socialManager->postMessage("I beat this game!", path.c_str(), [](CCSocialShare::PostResult result) {
                 if (result == CCSocialShare::PostResult::SUCCEED) {
                     // When to post is succeed
                 } else if (result == CCSocialShare::PostResult::CANCELED) {
