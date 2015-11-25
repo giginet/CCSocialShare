@@ -196,4 +196,5 @@ Carthage/Build
 fastlane/report.xml
 fastlane/screenshots
 
-
+# Android Studio
+*.iml
