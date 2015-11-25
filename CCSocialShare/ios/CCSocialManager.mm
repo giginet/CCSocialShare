@@ -4,6 +4,15 @@
 USING_NS_CC;
 
 namespace CCSocialShare {
+    SocialManager::SocialManager()
+    : _service(Service::TWITTER)
+    {
+    }
+    
+    SocialManager::~SocialManager()
+    {
+    }
+    
     SocialManager* SocialManager::createWithService(Service service)
     {
         SocialManager *manager = new SocialManager();
@@ -23,7 +32,12 @@ namespace CCSocialShare {
     
     bool SocialManager::isAvailable()
     {
-        return [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
+        if (_service == Service::TWITTER) {
+            return [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
+        } else {
+            return [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook];
+        }
+        return false;
     }
     
     void SocialManager::postMessage(const char *message, SocialManagerCompletionCallback callback)
@@ -33,8 +47,13 @@ namespace CCSocialShare {
     
     void SocialManager::postMessage(const char *message, const char *imagePath, SocialManagerCompletionCallback callback)
     {
-        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
-            NSString *serviceType = SLServiceTypeTwitter;
+        NSString *serviceType = nil;
+        if (_service == Service::TWITTER) {
+            serviceType = SLServiceTypeTwitter;
+        } else if (_service == Service::FACEBOOK) {
+            serviceType = SLServiceTypeFacebook;
+        }
+        if ([SLComposeViewController isAvailableForServiceType:serviceType]) {
             SLComposeViewController *composeController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
             NSString *text = [NSString stringWithCString:message encoding:NSUTF8StringEncoding];
             [composeController setInitialText:text];

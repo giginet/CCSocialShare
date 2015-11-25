@@ -5,7 +5,8 @@
 
 namespace CCSocialShare {
     enum class Service {
-        TWITTER
+        TWITTER,
+        FACEBOOK
     };
     
     enum class PostResult {
@@ -20,6 +21,8 @@ namespace CCSocialShare {
     protected:
         bool init(Service service);
     public:
+        SocialManager();
+        virtual ~SocialManager();
         static SocialManager *createWithService(Service service);
         bool isAvailable();
         void postMessage(const char* message, SocialManagerCompletionCallback callback);
