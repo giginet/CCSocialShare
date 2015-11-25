@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SocialShare {
+    final static String TWITTER_PACKAGE_NAME = "com.twitter.android";
+    final static String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
     static public void postToTwitter(String message, String imagePath) {
         String url = "http://twitter.com/share?text=" + message;
         Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(url));
@@ -26,6 +28,27 @@ public class SocialShare {
                     intent.setType("image/" + ext);
                     intent.putExtra(Intent.EXTRA_STREAM, readableFileUri);
                 }
+                intent.setPackage(TWITTER_PACKAGE_NAME);
+            } catch (Exception e) {
+            }
+        }
+        Context context = Cocos2dxActivity.getContext();
+        context.startActivity(intent);
+    }
+
+    static public void postToFacebook(String message, String imagePath) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TITLE, message);
+        if (!imagePath.equals("")) {
+            try {
+                Uri originalImageUri = Uri.parse(imagePath);
+                String ext = getExtension(originalImageUri);
+                Uri readableFileUri = saveImageToExternalDirectory(originalImageUri);
+                if (readableFileUri != null) {
+                    intent.setType("image/" + ext);
+                    intent.putExtra(Intent.EXTRA_STREAM, readableFileUri);
+                }
+                intent.setPackage(FACEBOOK_PACKAGE_NAME);
             } catch (Exception e) {
             }
         }

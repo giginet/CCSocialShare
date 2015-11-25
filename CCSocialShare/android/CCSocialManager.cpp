@@ -3,6 +3,15 @@
 
 namespace CCSocialShare {
     const char* SOCIAL_SHARE_CLASS_NAME = "org/kawaz/socialshare/SocialShare";
+    SocialManager::SocialManager()
+    : _service(Service::TWITTER)
+    {
+    }
+
+    SocialManager::~SocialManager()
+    {
+    }
+
     SocialManager* SocialManager::createWithService(Service service)
     {
         SocialManager *manager = new SocialManager();
@@ -34,7 +43,13 @@ namespace CCSocialShare {
     {
         auto env = cocos2d::JniHelper::getEnv();
         cocos2d::JniMethodInfo methodInfo;
-        if (cocos2d::JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, "postToTwitter", "(Ljava/lang/String;Ljava/lang/String;)V") ) {
+        std::string methodName;
+        if (_service == Service::TWITTER) {
+            methodName = "postToTwitter";
+        } else if (_service == Service::FACEBOOK) {
+            methodName = "postToFacebook";
+        }
+        if (cocos2d::JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, methodName.c_str(), "(Ljava/lang/String;Ljava/lang/String;)V") ) {
             jstring messageStr = env->NewStringUTF(message);
             jstring imagePathStr = env->NewStringUTF(imagePath);
             methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, messageStr, imagePathStr);
