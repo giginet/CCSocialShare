@@ -18,16 +18,12 @@ namespace CCSocialShare {
     using SocialManagerCompletionCallback = std::function<void (PostResult)>;
     
     class SocialManager :public cocos2d::Ref {
-    protected:
-        bool init(Service service);
     public:
         SocialManager();
         virtual ~SocialManager();
-        static SocialManager *createWithService(Service service);
-        bool isAvailable();
-        void postMessage(const char* message, SocialManagerCompletionCallback callback);
-        void postMessage(const char* message, const char* imagePath, SocialManagerCompletionCallback callback);
-        CC_SYNTHESIZE_READONLY(Service, _service, Service);
+        static bool isAvailable(Service service);
+        static void postMessage(Service service, const char* message, SocialManagerCompletionCallback callback);
+        static void postMessage(Service service, const char* message, const char* imagePath, SocialManagerCompletionCallback callback);
     };
 }
 

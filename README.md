@@ -22,13 +22,16 @@
 #include "CCSocialManager.h"
 
 void onShareButtonTapped() {
-    _socialManager = CCSocialShare::SocialManager::createWithService(CCSocialShare::Service::TWITTER);
-    if (_socialManager->isAvailable()) {
-        _socialManager->postMessage("I beat this game!", [](CCSocialShare::PostResult result) {
+    if (CCSocialShare::SocialManager::isAvailable(CCSocialShare::Service::TWITTER)) {
+        CCSocialShare::SocialManager::postMessage(CCSocialShare::Service::TWITTER,
+                                                  "I beat this game!",
+                                                  path.c_str(), [](CCSocialShare::PostResult result) {
             if (result == CCSocialShare::PostResult::SUCCEED) {
                 // When to post is succeed
+                log("Done");
             } else if (result == CCSocialShare::PostResult::CANCELED) {
                 // When to post is canceled
+                log("Canceled");
             }
         });
     }
@@ -40,11 +43,8 @@ void onShareButtonTapped() {
 ```cpp
 #include "CCSocialManager.h"
 
-USING_NS_CC;
-
 void onShareButtonTapped() {
-    _socialManager = CCSocialShare::SocialManager::createWithService(CCSocialShare::Service::TWITTER);
-    if (_socialManager->isAvailable()) {
+    if (CCSocialShare::SocialManager::isAvailable(CCSocialShare::Service::TWITTER)) {
         Size size = Director::getInstance()->getWinSize();
         RenderTexture* texture = RenderTexture::create((int)size.width, (int)size.height);
         texture->setPosition(Point(size.width / 2, size.height / 2));
@@ -52,12 +52,19 @@ void onShareButtonTapped() {
         Director::getInstance()->getRunningScene()->visit();
         texture->end();
 
-        texture->saveToFile("screenshot.png", Image::Format::PNG, true, [&](RenderTexture* rt, const std::string& path) {
-            _socialManager->postMessage("I beat this game!", path.c_str(), [](CCSocialShare::PostResult result) {
+        texture->saveToFile("screenshot.png",
+                            Image::Format::PNG,
+                            true,
+                            [&](RenderTexture* rt, const std::string& path) {
+            CCSocialShare::SocialManager::postMessage(CCSocialShare::Service::TWITTER,
+                                                      "I beat this game!",
+                                                      path.c_str(), [](CCSocialShare::PostResult result) {
                 if (result == CCSocialShare::PostResult::SUCCEED) {
                     // When to post is succeed
+                    log("Done");
                 } else if (result == CCSocialShare::PostResult::CANCELED) {
                     // When to post is canceled
+                    log("Canceled");
                 }
             });
         });
