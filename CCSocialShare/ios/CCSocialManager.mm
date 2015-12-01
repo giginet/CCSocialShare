@@ -5,7 +5,6 @@ USING_NS_CC;
 
 namespace CCSocialShare {
     SocialManager::SocialManager()
-    : _service(Service::TWITTER)
     {
     }
     
@@ -13,26 +12,9 @@ namespace CCSocialShare {
     {
     }
     
-    SocialManager* SocialManager::createWithService(Service service)
+    bool SocialManager::isAvailable(Service service)
     {
-        SocialManager *manager = new SocialManager();
-        if (manager && manager->init(service)) {
-            manager->autorelease();
-            return manager;
-        }
-        CC_SAFE_DELETE(manager);
-        return nullptr;
-    }
-    
-    bool SocialManager::init(CCSocialShare::Service service)
-    {
-        _service = service;
-        return true;
-    }
-    
-    bool SocialManager::isAvailable()
-    {
-        if (_service == Service::TWITTER) {
+        if (service == Service::TWITTER) {
             return [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
         } else {
             return [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook];
@@ -40,17 +22,17 @@ namespace CCSocialShare {
         return false;
     }
     
-    void SocialManager::postMessage(const char *message, SocialManagerCompletionCallback callback)
+    void SocialManager::postMessage(Service service, const char *message, SocialManagerCompletionCallback callback)
     {
-        this->postMessage(message, "", callback);
+        postMessage(service, message, "", callback);
     }
     
-    void SocialManager::postMessage(const char *message, const char *imagePath, SocialManagerCompletionCallback callback)
+    void SocialManager::postMessage(Service service, const char *message, const char *imagePath, SocialManagerCompletionCallback callback)
     {
         NSString *serviceType = nil;
-        if (_service == Service::TWITTER) {
+        if (service == Service::TWITTER) {
             serviceType = SLServiceTypeTwitter;
-        } else if (_service == Service::FACEBOOK) {
+        } else if (service == Service::FACEBOOK) {
             serviceType = SLServiceTypeFacebook;
         }
         if ([SLComposeViewController isAvailableForServiceType:serviceType]) {
