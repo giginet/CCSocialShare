@@ -25,7 +25,7 @@ void onShareButtonTapped() {
     if (CCSocialShare::SocialManager::isAvailable(CCSocialShare::Service::TWITTER)) {
         CCSocialShare::SocialManager::postMessage(CCSocialShare::Service::TWITTER,
                                                   "I beat this game!",
-                                                  path.c_str(), [](CCSocialShare::PostResult result) {
+                                                  [](CCSocialShare::PostResult result) {
             if (result == CCSocialShare::PostResult::SUCCEED) {
                 // When to post is succeed
                 log("Done");
