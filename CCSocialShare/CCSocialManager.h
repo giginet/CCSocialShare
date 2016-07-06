@@ -16,7 +16,6 @@ namespace CCSocialShare {
     };
     
     using SocialManagerCompletionCallback = std::function<void (PostResult)>;
-    
     class SocialManager :public cocos2d::Ref {
     public:
         SocialManager();
@@ -24,6 +23,12 @@ namespace CCSocialShare {
         static bool isAvailable(Service service);
         static void postMessage(Service service, const char* message, SocialManagerCompletionCallback callback);
         static void postMessage(Service service, const char* message, const char* imagePath, SocialManagerCompletionCallback callback);
+#ifdef __ANDROID__
+	static SocialManagerCompletionCallback _callback;
+	static void callCallback(int result){
+	    _callback(static_cast<PostResult>(result));
+	}
+#endif
     };
 }
 

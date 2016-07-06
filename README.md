@@ -141,7 +141,20 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes \
                     $(LOCAL_PATH)/../../../Classes/external/CCSocialShare/CCSocialShare
 ```
 
-5: Execute following command
+5: Edit `proj.android-studio/app/src/org/cocos2dx/cpp/AppActivity.java`
+
+```java
+import org.kawaz.socialshare.SocialShare;
+...
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        SocialShare.onActivityResult(resultCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+```
+
+6: Execute following command
 
 ```shell
 $ cocos compile -p android --android-studio

@@ -23,10 +23,13 @@ namespace CCSocialShare {
         postMessage(service, message, "", callback);
     }
 
+    SocialManagerCompletionCallback SocialManager::_callback = [](PostResult){};
+
     void SocialManager::postMessage(Service service,
             const char *message, const char *imagePath,
             SocialManagerCompletionCallback callback)
     {
+        _callback = callback;
         auto env = cocos2d::JniHelper::getEnv();
         cocos2d::JniMethodInfo methodInfo;
         std::string methodName;
@@ -42,3 +45,11 @@ namespace CCSocialShare {
         }
     }
 };
+
+extern "C"
+{
+	void Java_org_kawaz_socialshare_SocialShare_callCallback(JNIEnv *env, jobject thiz, jint code)
+	{
+    CCSocialShare::SocialManager::callCallback(code);
+	}
+}
