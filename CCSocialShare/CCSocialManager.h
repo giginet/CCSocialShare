@@ -24,10 +24,10 @@ namespace CCSocialShare {
         static void postMessage(Service service, const char* message, SocialManagerCompletionCallback callback);
         static void postMessage(Service service, const char* message, const char* imagePath, SocialManagerCompletionCallback callback);
 #ifdef __ANDROID__
-	static SocialManagerCompletionCallback _callback;
-	static void callCallback(int result){
-	    _callback(static_cast<PostResult>(result));
-	}
+        static SocialManagerCompletionCallback _callback;
+        static void callCallback(int result) {
+                _callback(static_cast<PostResult>(result));
+        }
 #endif
     };
 }
