@@ -160,4 +160,4 @@ import org.kawaz.socialshare.SocialShare;
 $ cocos compile -p android --android-studio
 ```
 
-6: Build and Run on Android Studio
+7: Build and Run on Android Studio
