@@ -12,7 +12,7 @@
     - Intent (Android)
 - Image attachment
 - Compatible with Android Studio
-- Callback function (Currently in iOS only)
+- Callback function
 
 ![](https://raw.githubusercontent.com/giginet/CCSocialShare/master/images/demo_ios.gif)
 
@@ -141,7 +141,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../Classes \
                     $(LOCAL_PATH)/../../../Classes/external/CCSocialShare/CCSocialShare
 ```
 
-5: Edit `proj.android-studio/app/src/org/cocos2dx/cpp/AppActivity.java`
+5: Edit `proj.android-studio/app/src/org/cocos2dx/cpp/AppActivity.java` to execute callback function.
 
 ```java
 import org.kawaz.socialshare.SocialShare;
