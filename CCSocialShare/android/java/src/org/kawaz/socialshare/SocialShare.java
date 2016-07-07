@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.app.Activity;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -13,8 +14,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SocialShare {
+    public enum PostResult {
+        SUCCEED,
+        FAILURE,
+        CANCELLED
+    }
+    private static native void executeCallback(int code);
     final static String TWITTER_PACKAGE_NAME = "com.twitter.android";
     final static String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
+    final static int REQUEST_CODE = 100;
     static public void postToTwitter(String message, String imagePath) {
         String url = "http://twitter.com/share?text=" + message;
         Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(url));
@@ -33,7 +41,7 @@ public class SocialShare {
             }
         }
         Context context = Cocos2dxActivity.getContext();
-        context.startActivity(intent);
+        ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
     }
 
     static public void postToFacebook(String message, String imagePath) {
@@ -53,7 +61,7 @@ public class SocialShare {
             }
         }
         Context context = Cocos2dxActivity.getContext();
-        context.startActivity(intent);
+        ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
     }
 
     static private String getExtension(Uri imagePath) {
@@ -88,5 +96,13 @@ public class SocialShare {
         }
         in.close();
         out.close();
+    }
+
+    static public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (intent == null) {
+            executeCallback(PostResult.CANCELLED.ordinal());
+            return;
+        }
+        executeCallback(PostResult.SUCCEED.ordinal());
     }
 }
