@@ -48,8 +48,8 @@ namespace CCSocialShare {
 
 extern "C"
 {
-    void Java_org_kawaz_socialshare_SocialShare_callCallback(JNIEnv *env, jobject thiz, jint code)
+    void Java_org_kawaz_socialshare_SocialShare_executeCallback(JNIEnv *env, jobject thiz, jint code)
     {
-        CCSocialShare::SocialManager::callCallback(code);
+        CCSocialShare::SocialManager::executeCallback(code);
     }
 }

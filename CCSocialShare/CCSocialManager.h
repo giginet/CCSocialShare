@@ -25,7 +25,7 @@ namespace CCSocialShare {
         static void postMessage(Service service, const char* message, const char* imagePath, SocialManagerCompletionCallback callback);
 #ifdef __ANDROID__
         static SocialManagerCompletionCallback _callback;
-        static void callCallback(int result) {
+        static void executeCallback(int result) {
                 _callback(static_cast<PostResult>(result));
         }
 #endif

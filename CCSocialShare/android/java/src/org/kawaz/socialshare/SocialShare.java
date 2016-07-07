@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SocialShare {
-    private static native void callCallback(int code);
+    private static native void executeCallback(int code);
     final static String TWITTER_PACKAGE_NAME = "com.twitter.android";
     final static String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
     final static int REQUEST_CODE = 100;
@@ -95,9 +95,9 @@ public class SocialShare {
 
     static public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (intent == null) {
-            callCallback(2);
+            executeCallback(2);
             return;
         }
-        callCallback(0);
+        executeCallback(0);
     }
 }
