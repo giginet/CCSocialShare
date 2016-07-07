@@ -3,9 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 import android.app.Activity;
-import android.os.Bundle;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -100,11 +98,6 @@ public class SocialShare {
             callCallback(2);
             return;
         }
-        // Bundle extras = intent.getExtras();
-        // for (final String k : extras.keySet()) {
-        //     final Object v = extras.get(k);
-        //     Log.d("SocialShare", k + " " + v);
-        // }
         callCallback(0);
     }
 }
