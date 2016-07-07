@@ -14,6 +14,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SocialShare {
+    public enum PostResult {
+        SUCCEED,
+        FAILURE,
+        CANCELLED
+    }
     private static native void executeCallback(int code);
     final static String TWITTER_PACKAGE_NAME = "com.twitter.android";
     final static String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
@@ -95,9 +100,9 @@ public class SocialShare {
 
     static public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (intent == null) {
-            executeCallback(2);
+            executeCallback(PostResult.CANCELLED.ordinal());
             return;
         }
-        executeCallback(0);
+        executeCallback(PostResult.SUCCEED.ordinal());
     }
 }
