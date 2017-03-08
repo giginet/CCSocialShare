@@ -109,23 +109,23 @@ public class SocialShare {
         executeCallback(PostResult.SUCCEED.ordinal());
     }
 
-    static public boolean isTwitterAvailable () {
+    static public boolean isTwitterAvailable() {
         return isAvailable(TWITTER_PACKAGE_NAME);
     }
 
-    static public boolean isFacebookAvailable () {
+    static public boolean isFacebookAvailable() {
         return isAvailable(FACEBOOK_PACKAGE_NAME);
     }
 
-    static private boolean isAvailable (String packageName) {
+    static private boolean isAvailable(String packageName) {
         Context context = Cocos2dxActivity.getContext();
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> appInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
         for (ApplicationInfo info : appInfoList) {
-          if (packageName.equals(info.processName)) {
-            return true;
-          }
+            if (packageName.equals(info.processName)) {
+                return true;
+            }
         }
         return false;
     }

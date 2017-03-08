@@ -21,14 +21,12 @@ namespace CCSocialShare {
         } else if (service == Service::FACEBOOK) {
             methodName = "isFacebookAvailable";
         }
-        if(JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, methodName.c_str(), "()Z"))
-        {
-            JNIEnv* env = JniHelper::getEnv();
+        if (JniHelper::getStaticMethodInfo(methodInfo, SOCIAL_SHARE_CLASS_NAME, methodName.c_str(), "()Z")) {
+            JNIEnv *env = JniHelper::getEnv();
             jboolean jbool = methodInfo.env->CallStaticBooleanMethod(methodInfo.classID, methodInfo.methodID);
             methodInfo.env->DeleteLocalRef(methodInfo.classID);
-            bool b = (jbool == JNI_TRUE);
-            return b;
-        }else{
+            return jbool == JNI_TRUE;
+        } else {
             return false;
         }
     }
