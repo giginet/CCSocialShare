@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -12,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 public class SocialShare {
     public enum PostResult {
@@ -104,5 +107,26 @@ public class SocialShare {
             return;
         }
         executeCallback(PostResult.SUCCEED.ordinal());
+    }
+
+    static public boolean isTwitterAvailable () {
+        return isAvailable(TWITTER_PACKAGE_NAME);
+    }
+
+    static public boolean isFacebookAvailable () {
+        return isAvailable(FACEBOOK_PACKAGE_NAME);
+    }
+
+    static private boolean isAvailable (String packageName) {
+        Context context = Cocos2dxActivity.getContext();
+        PackageManager packageManager = context.getPackageManager();
+        List<ApplicationInfo> appInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        for (ApplicationInfo info : appInfoList) {
+          if (packageName.equals(info.processName)) {
+            return true;
+          }
+        }
+        return false;
     }
 }
