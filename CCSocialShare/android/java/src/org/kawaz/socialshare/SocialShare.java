@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
@@ -15,6 +16,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
@@ -28,6 +32,7 @@ import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 public class SocialShare {
+    final static String TAG = "org.kawaz.socialshare.SocialShare";
     public enum PostResult {
         SUCCEED,
         FAILURE,
@@ -38,6 +43,7 @@ public class SocialShare {
     final static String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
     final static int REQUEST_CODE = 100;
     private static TwitterAuthClient authClient = null;
+    private static File imageFile = null;
 
     static private void postToTwitter(final String message, final String imagePath) {
         TwitterConfig config = new TwitterConfig.Builder(Cocos2dxActivity.getContext()).debug(true).build();
@@ -58,6 +64,7 @@ public class SocialShare {
                             builder.image(readableFileUri);
                         }
                     } catch (Exception e) {
+                        Log.d(TAG, e.getMessage());
                     }
                 }
                 ((Activity) context).startActivity(builder.createIntent());
@@ -101,15 +108,25 @@ public class SocialShare {
     }
 
     static private Uri saveImageToExternalDirectory(Uri imageUri) {
-        File dst = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), getFilename(imageUri));
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String newName = dateFormat.format(Calendar.getInstance().getTime()) + "." + getExtension(imageUri) ;
+        imageFile = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), newName);
         File src = new File(imageUri.getPath());
         try {
-            copyFile(src, dst);
+            copyFile(src, imageFile);
         } catch (Exception e) {
+            Log.d(TAG, e.getMessage());
             return null;
         }
-        return Uri.fromFile(dst);
+        return Uri.fromFile(imageFile);
+    }
+
+    static private void cleanFile() {
+        if(imageFile != null && imageFile.exists()){
+            imageFile.delete();
+            imageFile = null;
+        }
     }
 
     static public void copyFile(File src, File dst) throws Exception {
@@ -148,14 +165,17 @@ public class SocialShare {
     }
 
     static public void runSuccessCallback() {
+        cleanFile();
         executeCallback(PostResult.SUCCEED.ordinal());
     }
 
     static public void runFailureCallback() {
+        cleanFile();
         executeCallback(PostResult.FAILURE.ordinal());
     }
 
     static public void runCancelCallback() {
+        cleanFile();
         executeCallback(PostResult.CANCELLED.ordinal());
     }
 
