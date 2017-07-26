@@ -154,10 +154,21 @@ import org.kawaz.socialshare.SocialShare;
     }
 ```
 
-6: Execute following command
+6: If you use twitter share then you have to get new Twitter API consumer and secret keys from https://apps.twitter.com/ and put your key and secret to `proj.android-studio/app/res/values/twitter.xml` like this.
+
+```xml
+<resources>
+  <string name="com.twitter.sdk.android.CONSUMER_KEY">YOUR_CONSUMER_KEY</string>
+  <string name="com.twitter.sdk.android.CONSUMER_SECRET">YOUR_CONSUMER_SECRET</string>
+</resources>
+```
+
+note. The twitter app require `Read and Write` permission.
+
+7: Execute following command
 
 ```shell
 $ cocos compile -p android --android-studio
 ```
 
-7: Build and Run on Android Studio
+8: Build and Run on Android Studio
