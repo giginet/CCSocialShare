@@ -15,6 +15,17 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 public class SocialShare {
     public enum PostResult {
@@ -26,25 +37,38 @@ public class SocialShare {
     final static String TWITTER_PACKAGE_NAME = "com.twitter.android";
     final static String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
     final static int REQUEST_CODE = 100;
-    static public void postToTwitter(String message, String imagePath) {
-        String url = "http://twitter.com/share?text=" + message;
-        Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(url));
-        intent.putExtra(Intent.EXTRA_TEXT, message);
-        if (!imagePath.equals("")) {
-            try {
-                Uri originalImageUri = Uri.parse(imagePath);
-                String ext = getExtension(originalImageUri);
-                Uri readableFileUri = saveImageToExternalDirectory(originalImageUri);
-                if (readableFileUri != null) {
-                    intent.setType("image/" + ext);
-                    intent.putExtra(Intent.EXTRA_STREAM, readableFileUri);
-                }
-                intent.setPackage(TWITTER_PACKAGE_NAME);
-            } catch (Exception e) {
-            }
-        }
+    private static TwitterAuthClient authClient = null;
+
+    static private void postToTwitter(final String message, final String imagePath) {
+        TwitterConfig config = new TwitterConfig.Builder(Cocos2dxActivity.getContext()).debug(true).build();
+        Twitter.initialize(config);
         Context context = Cocos2dxActivity.getContext();
-        ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
+        authClient = new TwitterAuthClient();
+        authClient.authorize((Activity) context, new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                Context context = Cocos2dxActivity.getContext();
+                TwitterSession session = result.data;
+                ComposerActivity.Builder builder = new ComposerActivity.Builder(context).session(session).text(message);
+                if (!imagePath.equals("")) {
+                    try {
+                        Uri originalImageUri = Uri.parse(imagePath);
+                        Uri readableFileUri = saveImageToExternalDirectory(originalImageUri);
+                        if (readableFileUri != null) {
+                            builder.image(readableFileUri);
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+                ((Activity) context).startActivity(builder.createIntent());
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                Cocos2dxActivity activity = (Cocos2dxActivity) Cocos2dxActivity.getContext();
+                activity.showDialog("error", "Twitter login failure");
+            }
+        });
     }
 
     static public void postToFacebook(String message, String imagePath) {
@@ -102,11 +126,17 @@ public class SocialShare {
     }
 
     static public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (intent == null) {
-            executeCallback(PostResult.CANCELLED.ordinal());
+        if(authClient != null){
+            authClient.onActivityResult(TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE, resultCode, intent);
+            authClient = null;
             return;
         }
-        executeCallback(PostResult.SUCCEED.ordinal());
+
+        if (intent == null) {
+            runCancelCallback();
+            return;
+        }
+        runSuccessCallback();
     }
 
     static public boolean isTwitterAvailable() {
@@ -115,6 +145,18 @@ public class SocialShare {
 
     static public boolean isFacebookAvailable() {
         return isAvailable(FACEBOOK_PACKAGE_NAME);
+    }
+
+    static public void runSuccessCallback() {
+        executeCallback(PostResult.SUCCEED.ordinal());
+    }
+
+    static public void runFailureCallback() {
+        executeCallback(PostResult.FAILURE.ordinal());
+    }
+
+    static public void runCancelCallback() {
+        executeCallback(PostResult.CANCELLED.ordinal());
     }
 
     static private boolean isAvailable(String packageName) {

@@ -29,4 +29,7 @@ android {
 
 dependencies {
     compile project(':libcocos2dx')
+    compile 'com.twitter.sdk.android:twitter-core:3.0.0'
+    compile 'com.twitter.sdk.android:tweet-composer:3.0.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
 }
