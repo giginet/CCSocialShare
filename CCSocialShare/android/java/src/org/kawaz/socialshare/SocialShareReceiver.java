@@ -17,7 +17,6 @@ public class SocialShareReceiver extends BroadcastReceiver {
     } else {
         Log.d(TAG, "onReceive SocialShareReceiver FAILURE");
         Cocos2dxActivity activity = (Cocos2dxActivity) Cocos2dxActivity.getContext();
-        activity.showDialog("error", "You should retry after some hours.");
         SocialShare.runFailureCallback();
     }
   }

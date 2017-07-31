@@ -73,7 +73,7 @@ public class SocialShare {
             @Override
             public void failure(TwitterException e) {
                 Cocos2dxActivity activity = (Cocos2dxActivity) Cocos2dxActivity.getContext();
-                activity.showDialog("error", "Twitter login failure");
+                SocialShare.runFailureCallback();
             }
         });
     }
