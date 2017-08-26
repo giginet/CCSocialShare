@@ -1,6 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.kawaz.socialshare">
 
     <application android:allowBackup="true">
+        <receiver
+            android:name=".SocialShareReceiver"
+            android:exported="false">
+          <intent-filter>
+              <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_SUCCESS"/>
+              <action android:name="com.twitter.sdk.android.tweetcomposer.UPLOAD_FAILURE"/>
+          </intent-filter>
+        </receiver>
+
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>
