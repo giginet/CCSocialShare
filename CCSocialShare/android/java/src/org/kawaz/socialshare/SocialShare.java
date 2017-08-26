@@ -46,7 +46,7 @@ public class SocialShare {
     private static File imageFile = null;
 
     static private void postToTwitter(final String message, final String imagePath) {
-        TwitterConfig config = new TwitterConfig.Builder(Cocos2dxActivity.getContext()).debug(true).build();
+        TwitterConfig config = new TwitterConfig.Builder(Cocos2dxActivity.getContext()).build();
         Twitter.initialize(config);
         Context context = Cocos2dxActivity.getContext();
         authClient = new TwitterAuthClient();
@@ -64,7 +64,7 @@ public class SocialShare {
                             builder.image(readableFileUri);
                         }
                     } catch (Exception e) {
-                        Log.d(TAG, e.getMessage());
+                        Log.e(TAG, e.getMessage());
                     }
                 }
                 ((Activity) context).startActivity(builder.createIntent());
@@ -116,7 +116,6 @@ public class SocialShare {
         try {
             copyFile(src, imageFile);
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
             return null;
         }
         return Uri.fromFile(imageFile);
