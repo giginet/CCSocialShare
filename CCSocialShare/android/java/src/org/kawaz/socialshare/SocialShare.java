@@ -90,15 +90,20 @@ public class SocialShare {
 
     static public void copyFile(File src, File dst) throws Exception {
         InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
+        try {
+            OutputStream out = new FileOutputStream(dst);
+            try {
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            } finally {
+                out.close();
+            }
+        } finally {
+            in.close();
         }
-        in.close();
-        out.close();
     }
 
     static public void onActivityResult(int requestCode, int resultCode, Intent intent) {
